@@ -1,0 +1,18 @@
+.h-section {
+    background-image: url('../assets/image.png');
+    background-size: cover; /* La imagen cubrirá todo el ancho y largo */
+    background-position: start;
+    height: 45vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 0;
+}
+
+h{
+    padding-bottom: 0;
+}
