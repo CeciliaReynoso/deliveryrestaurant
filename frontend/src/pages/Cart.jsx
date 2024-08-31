@@ -1,5 +1,6 @@
-import PropTypes from 'prop-types';
+/* eslint-disable react/prop-types */
 import { Button, Card, Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 // Función para capitalizar la primera letra
 const capitalizeFirstLetter = (string) => {
@@ -19,73 +20,59 @@ const Cart = ({ cart, onIncreaseQuantity, onDecreaseQuantity }) => {
   };
 
   return (
-    <Container className='eCart' style={{ maxWidth: '50%', marginTop: '2rem' }}>
-      <div className="text-center mb-4">
+    <Container className='eCart' style={{ display:'flex',maxWidth: '50%', marginTop: '5rem', marginBottom:'25rem'}}>
+      <div className="text-center">
         <h2>🛒 Total Carrito: {formatPrice(getTotal())}</h2>
-        <Button variant="success" className="mt-2 btn-lg" >Pagar</Button>
+        <Button variant="success" className="m-2 btn-lg" >Pagar</Button> 
+        <p className='p-8'>Desde 🍕Home pulse 'Añadir'para traer productos al carrito</p>
       </div>
-
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem'
-      }}>
+      <div>
         {cart.map(pizza => (
           <Card key={pizza.id} style={{
             display: 'flex',
-            flexDirection: 'row',
+            flexDirection: 'row',            
             width: '100%',
             padding: '0.5rem',
             borderRadius: '10px',
             boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'
           }} className="mb-3">
             <Card.Img 
-              variant="left" 
+              variant="center" 
               src={pizza.img} 
               alt={pizza.name}
               style={{ 
-                width: '120px', 
+                width: '150px', 
                 height: '120px', 
                 objectFit: 'cover', 
-                borderRadius: '8px' 
+                borderRadius: '8px',
+                margin:'1.5rem auto', 
               }} 
-            />
-            <Card.Body style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingLeft: '1rem' }}>
-              <Card.Title>{capitalizeFirstLetter(pizza.name)}</Card.Title>
-              <Card.Text>Precio: {formatPrice(pizza.price)}</Card.Text>
-              <Card.Text>Cantidad: {pizza.quantity}</Card.Text>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            />         
+
+            <Card.Body style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingLeft: '1rem' }}>
+            <Card.Title>{capitalizeFirstLetter(pizza.name)}</Card.Title>
+            <Card.Text>Precio: {formatPrice(pizza.price)}</Card.Text>                          
+            
+              <div style={{ display: 'flex', justifyContent: 'center',alignItems: 'center', gap: '0.5rem' }}>
                 <Button 
                   variant="outline-dark" 
                   size="sm" 
                   onClick={() => onDecreaseQuantity(pizza.id)}
                 >-</Button>
+                <Card.Title>{pizza.quantity}</Card.Title>
                 <Button 
                   variant="dark" 
                   size="sm" 
                   onClick={() => onIncreaseQuantity(pizza.id)}
                 >+</Button>
               </div>
+            <Card.Text>Sub-Total: {formatPrice(pizza.price * pizza.quantity)}</Card.Text>  
             </Card.Body>
           </Card>
         ))}
       </div>
     </Container>
   );
-};
-
-Cart.propTypes = {
-  cart: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      img: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-      quantity: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-  onIncreaseQuantity: PropTypes.func.isRequired,
-  onDecreaseQuantity: PropTypes.func.isRequired,
 };
 
 export default Cart;

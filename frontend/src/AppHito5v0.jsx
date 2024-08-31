@@ -1,21 +1,20 @@
 import './App.css';
 import { useState } from 'react';
 import { Route, Routes } from "react-router-dom";
-import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Cart from './pages/Cart';
 import Footer from './components/Footer';
 import NavbarComponent from './components/Navbar';
-import HomeComponent from './pages/Home';
+import HomeComponent from './pages/Home'; // Importa el nuevo HomeComponent
 import PizzaComponent from './pages/Pizza';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import ProfileComponent from './pages/Profile';
-import NotFound from './pages/NotFound';
-
+import Profile from './pages/Profile';
+import NotFound from './pages/NotFound'
 
 const App = () => {
   const [cart, setCart] = useState([]);
-
+  
   const handleAddToCart = (pizza) => {
     setCart(prevCart => {
       const pizzaInCart = prevCart.find(item => item.id === pizza.id);
@@ -52,53 +51,47 @@ const App = () => {
     return cart.reduce((total, pizza) => total + (pizza.price * pizza.quantity), 0);
   };
 
-  // Componente que recibe el ID de la pizza y lo pasa al PizzaComponent de pizza.jsx
-  const PizzaWithId = () => {
-    const { pizzaId } = useParams(); // Obtiene el ID de la pizza desde la URL
-    return <PizzaComponent pizzaId={pizzaId} onAddToCart={handleAddToCart} />;
-  };
-
   return (
     <div>
       <NavbarComponent total={getTotal()} />
-      <Routes>
-        <Route
-          path="/"
-          element={<HomeComponent onAddToCart={handleAddToCart} />}
-        />
-        <Route
-          path="/register"
-          element={<Register />}
-        />
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-        <Route
-          path="/profile"
-          element={<ProfileComponent />}
-        />
-        <Route
-          path="/cart"
-          element={<Cart
-            cart={cart}
-            onIncreaseQuantity={handleIncreaseQuantity}
-            onDecreaseQuantity={handleDecreaseQuantity}
-          />}
-        />
-        {/* Ruta dinámica para pizzas */}
-        <Route
-          path="/pizza/:pizzaId"
-          element={<PizzaWithId />}
-        />
-        <Route
-          path="*"
-          element={<NotFound />}
-        />
-      </Routes>
-      <Footer />
+          <Routes>
+              <Route
+              path="/"
+              element={<HomeComponent onAddToCart={handleAddToCart} />}
+              />
+              <Route
+              path="/register"
+              element={<Register />}
+              />
+              <Route
+              path="/login"
+              element={<Login />}
+              />
+              <Route
+              path="/profile"
+              element={<Profile />}
+              />
+              <Route
+              path="/cart"
+              element={<Cart
+                cart={cart}
+                onIncreaseQuantity={handleIncreaseQuantity}
+                onDecreaseQuantity={handleDecreaseQuantity}   
+              />}
+              />
+              <Route
+              path="/pizza/p001"
+              element={<PizzaComponent />}
+              />
+              <Route
+              path="*"
+              element={<NotFound />}
+              />
+          </Routes>
+    <Footer />      
     </div>
   );
 };
 
 export default App;
+

@@ -1,7 +1,14 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
 const CardPizzaComponent = ({ pizza, onAddToCart }) => {
-  const { name, img, price, ingredients } = pizza;
+  const { id, name, img, price, ingredients } = pizza;
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/pizza/${id}`);
+  };
+
 
   // Función para capitalizar la primera letra del nombre
   const capitalizeFirstLetter = (string) => {
@@ -34,7 +41,7 @@ const CardPizzaComponent = ({ pizza, onAddToCart }) => {
         </div>
         <p className="card-text p-2">Precio: {formatPrice(price)}</p>
         <div className="d-flex justify-content-between">
-            <button type="button" className="btn btn-outline-dark">👀 Ver más</button>
+            <button type="button" className="btn btn-outline-dark" onClick={handleClick}>👀 Ver más</button>
             <button type="button" className="btn btn-dark" onClick={() => onAddToCart(pizza)}>Añadir 🛒</button>
           </div>
       </div>

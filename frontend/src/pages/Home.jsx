@@ -1,14 +1,15 @@
+/* eslint-disable react/prop-types */
 //Home.jsx Da mensajes de error y durante el lapso de carga de datos desde la API
 import React, { useEffect, useState } from 'react';
-import HeaderComponent from "./Header";
-import CardPizzaComponent from "./CardPizza";
-import PropTypes from "prop-types";
-import './Home.css'; // Estilos CSS aplicados
+import HeaderComponent from "../components/Header";
+import CardPizzaComponent from "../components/CardPizza";
+import '../components/Home.css'; // Estilos CSS aplicados
 
 const HomeComponent = ({ onAddToCart }) => {
   const [pizzas, setPizzas] = useState([]); // Estado para almacenar las pizzas
   const [loading, setLoading] = useState(true); // Estado para manejar la carga
   const [error, setError] = useState(null); // Estado para manejar errores
+
 
   // useEffect para consumir la API
   useEffect(() => {
@@ -47,10 +48,6 @@ const HomeComponent = ({ onAddToCart }) => {
       </div>
     </>
   );
-};
-
-HomeComponent.propTypes = {
-  onAddToCart: PropTypes.func.isRequired,
 };
 
 export default HomeComponent;
