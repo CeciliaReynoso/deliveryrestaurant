@@ -35,7 +35,7 @@ const Register = () => {
 
   return (
     <>
-    <h1 style={{paddingTop:'70px', color: '#000',textAlign:'center'}} >Register</h1>
+    <h1 style={{paddingTop:'120px', color: '#000',textAlign:'center'}} >Register</h1>
     <Form onSubmit={handleSubmit} className="register-container">
       <Form.Group className="form-group">
         <Form.Label>Email</Form.Label>

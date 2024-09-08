@@ -1,10 +1,11 @@
-/* eslint-disable react/prop-types */
 import { Navbar, Nav, Button, Container, Offcanvas } from 'react-bootstrap';
-import { formatTotal } from '../utils/format';
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { CartContext } from '../context/CartContext';
 
-
-const NavbarComponent = ({ total }) => {
+const NavbarComponent = () => {
+  const { getTotal } = useContext(CartContext);
+  const total = getTotal();  // Obtiene el total desde el contexto
   const token = false; // Cambia a true para simular un usuario logueado
 
   return (
@@ -39,11 +40,11 @@ const NavbarComponent = ({ total }) => {
                 )}
               </Nav>
               <div className='total-container'>
-              <Nav.Link as={Link} to="/cart">
-              <Button variant="outline-info" className="mt-2 mt-lg-0">
-               🛒 Total: ${formatTotal(total)}
-              </Button>
-              </Nav.Link>
+                <Nav.Link as={Link} to="/cart">
+                  <Button variant="outline-info" className="mt-2 mt-lg-0">
+                    🛒 Total: ${total.toLocaleString('es-CL')}
+                  </Button>
+                </Nav.Link>
               </div>
             </div>
           </Offcanvas.Body>

@@ -1,49 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { ApiContext } from '../context/ApiContext';
+import { CartContext } from '../context/CartContext';
+import {capitalizeFirstLetter, formatPrice } from '../utils/format'
 
-// Función para capitalizar la primera letra
-const capitalizeFirstLetter = (string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-};
-
-// Función para formatear el precio en pesos chilenos
-const formatPrice = (price) => {
-  return price.toLocaleString('es-CL', {
-    style: 'currency',
-    currency: 'CLP',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  });
-};
-
-const PizzaComponent = ({ pizzaId, onAddToCart }) => {
-  const [pizza, setPizza] = useState(null); // Estado para almacenar los datos de la pizza
-  const [loading, setLoading] = useState(true); // Estado para manejar la carga
-  const [error, setError] = useState(null); // Estado para manejar errores
-
-  // useEffect para consumir la API(en App.jsx se pasa pizzaId)
+const PizzaComponent = () => {
+  const { pizzaId } = useParams();
+  const { pizza, fetchPizzaById, error} = useContext(ApiContext);
+  const { handleAddToCart } = useContext(CartContext);
+  
+// useEffect para ejecutar fetchPizzasById al montar el componente
   useEffect(() => {
-    const fetchPizza = async () => {
-      try {
-        const response = await fetch(`http://localhost:5000/api/pizzas/${pizzaId}`);
-        if (!response.ok) {
-          throw new Error('Ocurrió un error, revisar la llave de búsqueda del producto para ver más 👀');
-        }
-        const data = await response.json();
-        setPizza(data);
-      } catch (error) {
-        setError(error.message || error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    fetchPizzaById(pizzaId);
+    }, [pizzaId]); 
 
-    fetchPizza();
-  }, [pizzaId]); // Ahora el efecto depende del ID de la pizza
-
-  if (loading) return <p>Cargando datos...</p>; // Mostrar mensaje de carga cuando demora la API
-  if (error) return <p>Error: {error}</p>; // Mostrar mensaje de error
-
-  return (
+    return (
+    error ? <p>Error: {error}</p>
+    :   
     pizza && (
       <div
         className='eDesc'
@@ -89,7 +62,7 @@ const PizzaComponent = ({ pizzaId, onAddToCart }) => {
             <button
               type="button"
               className="btn btn-dark m-3"
-              onClick={() => onAddToCart(pizza)}
+              onClick={() => handleAddToCart(pizza)}
             >
               Añadir 🛒
             </button>
@@ -118,3 +91,4 @@ const PizzaComponent = ({ pizzaId, onAddToCart }) => {
 };
 
 export default PizzaComponent;
+

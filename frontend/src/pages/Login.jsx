@@ -28,9 +28,9 @@ const Login = () => {
   };
 
   return (
-    <>
-    <h1 style={{paddingTop:'100px',paddingBottom:0, marginBottom:0, color: '#000',textAlign:'center'}} >Login</h1>  
-    <div className="login-container">
+    <div style={{paddingTop:'120px', paddingBottom:'130px',display:'flex', flexDirection:'column', justifyContent:'space-between'}}>
+    <h1 style={{color: '#000',textAlign:'center'}} >Login</h1>  
+    <div className="login-container p-3">
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Email:</label>
@@ -55,14 +55,15 @@ const Login = () => {
             required
           />
         </div>
-
+        <div style={{display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
         <button type="submit" className="btn btn-primary">
           Login
         </button>
         {message ? <p className="mt-3">{message}</p> : null} 
+        </div>
       </form>
     </div>
-   </> 
+    </div>  
   );
 };
 
