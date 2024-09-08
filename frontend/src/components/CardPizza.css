@@ -1,0 +1,28 @@
+.card {
+  width: 100%;
+  margin-left: 1.5rem;  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 100%; /* Hace que todas las tarjetas tengan la misma altura */
+}
+
+.card-image-top {
+  height: 200px; /* Ajusta según tus necesidades */
+  display: cover;
+}
+
+.ingredients-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 180px; /* Altura fija para el contenedor de ingredientes */
+  object-fit: contain
+}
+
+
+.ingredients-list {
+  margin: 0;
+  text-align: center;
+}
