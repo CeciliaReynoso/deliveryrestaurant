@@ -12,7 +12,7 @@ const PizzaComponent = () => {
 // useEffect para ejecutar fetchPizzasById al montar el componente
   useEffect(() => {
     fetchPizzaById(pizzaId);
-    }, [pizzaId]); 
+    }, []); 
 
     return (
     error ? <p>Error: {error}</p>
