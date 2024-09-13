@@ -6,13 +6,15 @@ import {capitalizeFirstLetter, formatPrice } from '../utils/format'
 
 const PizzaComponent = () => {
   const { pizzaId } = useParams();
-  const { pizza, fetchPizzaById, error} = useContext(ApiContext);
+  const { pizza, fetchPizzaById, error, loading} = useContext(ApiContext);
   const { handleAddToCart } = useContext(CartContext);
   
 // useEffect para ejecutar fetchPizzasById al montar el componente
   useEffect(() => {
     fetchPizzaById(pizzaId);
-    }, []); 
+    }, [pizzaId]); 
+
+    if (loading) return <p>Cargando datos...</p>;
 
     return (
     error ? <p>Error: {error}</p>

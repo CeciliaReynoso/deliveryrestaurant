@@ -1,6 +1,8 @@
 import { Button, Card, Container } from 'react-bootstrap';
 import { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
+import { UserContext } from '../context/UserContext';
+
 
 // Función para capitalizar la primera letra
 const capitalizeFirstLetter = (string) => {
@@ -15,13 +17,18 @@ const formatPrice = (price) => {
 // Componente Cart
 const Cart = () => {
   // Aquí accede al contexto, pudiéndose obviar las props usadas anteriormente
+  const {user}= useContext(UserContext)
+  const token = user.token
   const { cart, handleIncreaseQuantity, handleDecreaseQuantity, getTotal } = useContext(CartContext);
+  
 
   return (
+    !token? <h1>Para ver el 🛒 y pagar, vaya primero a opción Login e identifíquese</h1>
+    :
     <Container className='eCart' style={{ display:'flex', maxWidth: '50%', marginTop: '5rem', marginBottom:'25rem' }}>
       <div className="text-center">
         <h2>🛒 Total Carrito: {formatPrice(getTotal())}</h2>
-        <Button variant="success" className="m-2 btn-lg">Pagar</Button> 
+        <Button disable={token} className={token?"m-2 btn-lg btn-success":"m-2 btn-lg btn-danger"}>Pagar</Button> 
         <p className='p-8'>Desde 🍕Home pulse 'Añadir' para traer productos al carrito. Para eliminar un ítem disminuir a cero la cantidad.</p>
       </div>
       <div>

@@ -1,12 +1,25 @@
 import { Navbar, Nav, Button, Container, Offcanvas } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 import { CartContext } from '../context/CartContext';
 
 const NavbarComponent = () => {
+  const { user, setUser } = useContext(UserContext);
   const { getTotal } = useContext(CartContext);
   const total = getTotal();  // Obtiene el total desde el contexto
-  const token = false; // Cambia a true para simular un usuario logueado
+  const navigate = useNavigate(); // Hook para la navegación
+
+  const logOut = () => {
+    // Elimina el usuario de localStorage
+    localStorage.removeItem('user');
+    
+    // Establece el usuario en el estado del contexto
+    setUser({ username: "", password: "", token: false });
+    
+    // Redirige al home
+    navigate("/");
+  };
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg" style={{ position: 'fixed', top: '0', width: '100%', zIndex: 1030 }}>
@@ -27,10 +40,10 @@ const NavbarComponent = () => {
             <div className="d-flex w-100 justify-content-between align-items-center">
               <Nav className="justify-content-start flex-grow-1 pe-3">
                 <Nav.Link as={Link} to="/">🍕 Home</Nav.Link>
-                {token ? (
+                {user.token ? (
                   <>
                     <Nav.Link as={Link} to="/profile">🔓 Profile</Nav.Link>
-                    <Nav.Link as={Link} to="/logout">🔒 Logout</Nav.Link>
+                    <Nav.Link as={Link} onClick={logOut}>🔒 Logout</Nav.Link>
                   </>
                 ) : (
                   <>

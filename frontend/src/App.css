@@ -107,6 +107,7 @@ h6{
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 /*Margenes para componentes con pocos datos como pizza o login
 /* Márgenes para pantallas pequeñas y superiores */
