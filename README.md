@@ -1,3 +1,2 @@
 # Ecomerce-MamaMia
-Pizzería MamaMía.  En esta versión ya funcionan los botones "Ver más👀" y "Añadir", desde los cuales se agregan 
-ítems al carrito de compras.
+Pizzería MamaMía.  Esta es la versión final del Proyecto Pizzería Mama Mía.  El principal objetivo has sido la introducción de JWT en el proyecto.
