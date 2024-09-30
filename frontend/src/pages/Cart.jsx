@@ -40,7 +40,6 @@ const Cart = () => {
         price: index.price,
         quantity: index.quantity
       })),
-      user: user,
     };
 
     console.log("JSON del carrito:", JSON.stringify(cartPayload, null, 2));
