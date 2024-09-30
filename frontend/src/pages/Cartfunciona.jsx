@@ -15,23 +15,11 @@ const formatPrice = (price) => {
 
 // Componente Cart
 const Cart = () => {
-  const { token, user, setLogout } = useContext(UserContext);  // Aquí accedemos a token directamente
+  const { token, user } = useContext(UserContext);  // Aquí accedemos a token directamente
   const { cart, handleIncreaseQuantity, handleDecreaseQuantity, getTotal, clearCart } = useContext(CartContext); // clearCart se añade para vaciar el carrito
-
-  // Usar useEffect para verificar user y token
-  useEffect(() => {
-    console.log("User desde Cart:", user);
-    console.log("Token desde Cart:", token);  
-    console.log("Cart desde Cart", cart);  
-  }, [user, token, cart]);
 
   // Función para realizar el checkout
   const handleCheckout = async () => {
-    if (!token) {
-      alert("No está autenticado. Inicie sesión para realizar la compra.");
-      return;
-    }
-
     if (cart.length === 0) {
       alert("El carrito está vacío.");
       return;
@@ -39,17 +27,23 @@ const Cart = () => {
 
     // Crear el objeto JSON del carrito
     const cartPayload = {
-      cart: cart.map(index=> ({
-        id: index.id,
-        name: index.name,
-        price: index.price,
-        quantity: index.quantity
+      cart: cart.map(pizza => ({
+        id: pizza.id,
+        name: pizza.name,
+        price: pizza.price,
+        quantity: pizza.quantity
       })),
       user: user,
     };
 
     // Imprimir el objeto JSON del carrito
     console.log("JSON del carrito:", JSON.stringify(cartPayload, null, 2));
+    useEffect(() => {
+      console.log("User desde Cart:", user);
+      console.log("Token desde Cart:", token);  
+      console.log("Cart desde Cart", cart);  
+    }, [user, token, cart]);
+  
 
     try {
       const response = await fetch("http://localhost:5000/api/checkouts", {
@@ -62,16 +56,17 @@ const Cart = () => {
       });
 
       const data = await response.json();
-      alert(data?.error || data.message);
+      alert(data?.error || "Compra exitosa!");
 
       // Limpiar el carrito después de un pago exitoso
       clearCart();
-      } catch (error) {
+    } catch (error) {
       console.error("Error en el checkout:", error);
       alert("Error en el proceso de compra.");
     }
   };
 
+  
   return (
     !token ? (
       <h1>Para ver el 🛒 y pagar, vaya primero a opción Login e identifíquese</h1>

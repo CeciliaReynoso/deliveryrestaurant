@@ -1,11 +1,13 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from '../context/CartContext';
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const cart  = useContext(CartContext);
 
   const navigate = useNavigate();
 
@@ -18,7 +20,25 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
-    const logOut = () => {
+  const check = async () => {
+    console.log("Cart before sending:", cart);  // Verifica el carrito antes del envío
+    const response = await fetch("http://localhost:5000/api/checkouts", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        cart: cart,
+        user: user,  
+      }),
+          });
+          
+    const data = await response.json();
+    alert(data?.error || data.message);
+  };
+
+  const logOut = () => {
     localStorage.removeItem("token");
     setToken(null);
     setUser(null);
@@ -80,7 +100,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, login, token, register2, getUser, logOut }}>
+    <UserContext.Provider value={{ user, setUser, login, token, register2, getUser, logOut, check }}>
       {children}
     </UserContext.Provider>
   );

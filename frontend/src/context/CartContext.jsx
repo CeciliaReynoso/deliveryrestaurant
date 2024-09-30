@@ -6,7 +6,10 @@ export const CartContext = createContext();
 // Crea un proveedor para el contexto
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
-
+  const clearCart = () => {
+    setCart([]);  // Vaciamos el carrito estableciendo un array vacío
+  };
+  
   const handleAddToCart = (pizza) => {
     setCart(prevCart => {
       const pizzaInCart = prevCart.find(item => item.id === pizza.id);
@@ -51,6 +54,7 @@ export const CartProvider = ({ children }) => {
         handleIncreaseQuantity,
         handleDecreaseQuantity,
         getTotal,
+        clearCart,
       }}
     >
       {children}

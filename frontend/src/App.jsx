@@ -21,13 +21,7 @@ const App = () => {
     return <PizzaComponent pizzaId={pizzaId} />;
   };
 
-  const { user } = useContext(UserContext);
-  
-  // Asegúrate de que `user` tenga un valor por defecto (puedes hacerlo desde el contexto).
-  console.log('User in App:', user);
-
-  const token = user.token; 
-  console.log('User in App:', user);
+  const { token, logOut } = useContext(UserContext);
 
   return (
     <CartProvider>

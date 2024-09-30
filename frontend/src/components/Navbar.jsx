@@ -5,21 +5,12 @@ import { UserContext } from '../context/UserContext';
 import { CartContext } from '../context/CartContext';
 
 const NavbarComponent = () => {
-  const { user, setUser } = useContext(UserContext);
-  const { getTotal } = useContext(CartContext);
-  const total = getTotal();  // Obtiene el total desde el contexto
+  const { user, token, logOut } = useContext(UserContext); // Obtenemos `token` y `logOut` del UserContext
+  const { getTotal } = useContext(CartContext); // Obtenemos el total del carrito desde el CartContext
+  const total = getTotal(); // Obtiene el total desde el contexto
   const navigate = useNavigate(); // Hook para la navegación
 
-  const logOut = () => {
-    // Elimina el usuario de localStorage
-    localStorage.removeItem('user');
-    
-    // Establece el usuario en el estado del contexto
-    setUser({ username: "", password: "", token: false });
-    
-    // Redirige al home
-    navigate("/");
-  };
+  console.log('User in Navbar:', user); // Para depuración
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg" style={{ position: 'fixed', top: '0', width: '100%', zIndex: 1030 }}>
@@ -32,18 +23,18 @@ const NavbarComponent = () => {
           placement="end"
         >
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title id="offcanvasNavbarLabel">
-              Offcanvas
-            </Offcanvas.Title>
+            <Offcanvas.Title id="offcanvasNavbarLabel">Offcanvas</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <div className="d-flex w-100 justify-content-between align-items-center">
               <Nav className="justify-content-start flex-grow-1 pe-3">
                 <Nav.Link as={Link} to="/">🍕 Home</Nav.Link>
-                {user.token ? (
+
+                {/* Muestra el perfil y logout si hay token, de lo contrario muestra login/register */}
+                {token ? (
                   <>
                     <Nav.Link as={Link} to="/profile">🔓 Profile</Nav.Link>
-                    <Nav.Link as={Link} onClick={logOut}>🔒 Logout</Nav.Link>
+                    <Nav.Link onClick={logOut}>🔒 Logout</Nav.Link>
                   </>
                 ) : (
                   <>
@@ -52,6 +43,7 @@ const NavbarComponent = () => {
                   </>
                 )}
               </Nav>
+
               <div className='total-container'>
                 <Nav.Link as={Link} to="/cart">
                   <Button variant="outline-info" className="mt-2 mt-lg-0">

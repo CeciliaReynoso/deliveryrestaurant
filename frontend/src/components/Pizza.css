@@ -17,7 +17,7 @@
   .eCart .cart-items {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
     gap: 1rem;
   }
   

@@ -1,25 +1,24 @@
 import { useState, useContext, useEffect } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
-  const { user, setUser } = useContext(UserContext); // Acceder a `user`
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const { register2, token } = useContext(UserContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const navigate = useNavigate();
 
-  // Redirigir al usuario si ya está logueado (token === true)
+  // Redirigir al usuario si ya está logueado
   useEffect(() => {
-    if (user?.token) {
+    if (token) {
       alert('You are already registered and logged in.');
-      navigate('/'); // Redirigir al home si ya está logueado
+      navigate('/');
     }
-  }, []);
+  }, [token, navigate]);
 
   const validatePassword = (password) => {
     if (password.length < 6) {
@@ -30,24 +29,17 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const passwordValidationError = validatePassword(password);
+    setPasswordError(passwordValidationError);
 
-    if (!email || !password || !confirmPassword) {
-      setMessage('All fields are required.');
-    } else if (passwordValidationError) {
-      setPasswordError(passwordValidationError);
-    } else if (password !== confirmPassword) {
-      setMessage('🤔The passwords do not match.');
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
     } else {
-      const userAuth = {
-        username: email,
-        token: true, // Simular el login con token verdadero
-      };
-      setUser(userAuth);
-      setMessage('🍕 Successful registration, order your delicious pizza!');
-      setPasswordError('');
-      setConfirmPasswordError('');
+      setConfirmPasswordError("");
+    }
+
+    if (!passwordValidationError && password === confirmPassword) {
+      register2(email, password); // Realiza el registro
     }
   };
 
@@ -63,6 +55,7 @@ const Register = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            autoComplete='off'
           />
         </Form.Group>
         <Form.Group className="form-group">
@@ -74,6 +67,7 @@ const Register = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
             minLength={6}
+            autoComplete='off'
           />
           {passwordError && <p className="error-message">{passwordError}</p>}
         </Form.Group>
@@ -82,19 +76,15 @@ const Register = () => {
           <Form.Control
             type="password"
             value={confirmPassword}
-            onChange={(e) => {
-              setConfirmPassword(e.target.value);
-              const passwordValidationError = validatePassword(password);
-              setConfirmPasswordError(passwordValidationError);
-            }}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             required
+            autoComplete='off'
           />
           {confirmPasswordError && <p className="error-message">{confirmPasswordError}</p>}
         </Form.Group>
         <Button variant="primary" type="submit" className="btn-primary">
           Register
         </Button>
-        {message ? <p className="mt-3">{message}</p> : null}
       </Form>
     </>
   );

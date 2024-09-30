@@ -3,23 +3,23 @@ import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const { user, setUser } = useContext(UserContext); // Acceder a `user`
+  const { user, login } = useContext(UserContext); // Acceder a `user` y `login`
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  // Redirigir al usuario si ya está logueado (token === true)
+  // Redirigir al usuario si ya está logueado
   useEffect(() => {
-    if (user?.token) {
+    if (user) {
       alert('You are already logged in.');
       navigate('/'); // Redirigir al home si ya está logueado
     }
   }, [user, navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email)) {
@@ -32,21 +32,15 @@ const Login = () => {
       return;
     }
 
-    // Autenticación simulada
-    const userAuth = {
-      username: email,
-      password: "******", // Enmascara la contraseña
-      token: true
-    };
-
-    // Guarda el usuario en localStorage
-    localStorage.setItem('user', JSON.stringify(userAuth));
-
-    // Establece el usuario en el estado del contexto
-    setUser(userAuth);
-    setMessage('🍕 Successful login !!!');
-    navigate("/profile"); // Redirige después del login
-    console.log('User after login:', userAuth);
+    // Llama a la función login del contexto
+    const response = await login(email, password);
+    
+    if (response) {
+      setMessage('🍕 Successful login !!!');
+      navigate("/profile"); // Redirige después del login
+    } else {
+      setMessage('Login failed. Please check your credentials.');
+    }
   };
 
   return (
@@ -62,6 +56,7 @@ const Login = () => {
               className="form-control"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              autoComplete='off'
               required
             />
           </div>
@@ -74,6 +69,7 @@ const Login = () => {
               className="form-control"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete='off'
               required
             />
           </div>
