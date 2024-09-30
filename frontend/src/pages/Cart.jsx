@@ -2,7 +2,6 @@ import { Button, Card, Container } from 'react-bootstrap';
 import { useContext, useEffect } from 'react';
 import { CartContext } from '../context/CartContext';
 import { UserContext } from '../context/UserContext';
-
 // Función para capitalizar la primera letra
 const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -13,19 +12,16 @@ const formatPrice = (price) => {
   return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(price);
 };
 
-// Componente Cart
 const Cart = () => {
-  const { token, user, setLogout } = useContext(UserContext);  // Aquí accedemos a token directamente
-  const { cart, handleIncreaseQuantity, handleDecreaseQuantity, getTotal, clearCart } = useContext(CartContext); // clearCart se añade para vaciar el carrito
+  const { token, user, logOut } = useContext(UserContext);  // Importamos logOut desde UserContext
+  const { cart, handleIncreaseQuantity, handleDecreaseQuantity, getTotal, clearCart } = useContext(CartContext);
 
-  // Usar useEffect para verificar user y token
   useEffect(() => {
     console.log("User desde Cart:", user);
-    console.log("Token desde Cart:", token);  
-    console.log("Cart desde Cart", cart);  
+    console.log("Token desde Cart:", token);
+    console.log("Cart desde Cart", cart);
   }, [user, token, cart]);
 
-  // Función para realizar el checkout
   const handleCheckout = async () => {
     if (!token) {
       alert("No está autenticado. Inicie sesión para realizar la compra.");
@@ -37,9 +33,8 @@ const Cart = () => {
       return;
     }
 
-    // Crear el objeto JSON del carrito
     const cartPayload = {
-      cart: cart.map(index=> ({
+      cart: cart.map(index => ({
         id: index.id,
         name: index.name,
         price: index.price,
@@ -48,7 +43,6 @@ const Cart = () => {
       user: user,
     };
 
-    // Imprimir el objeto JSON del carrito
     console.log("JSON del carrito:", JSON.stringify(cartPayload, null, 2));
 
     try {
@@ -62,13 +56,24 @@ const Cart = () => {
       });
 
       const data = await response.json();
-      alert(data?.error || data.message);
 
-      // Limpiar el carrito después de un pago exitoso
-      clearCart();
-      } catch (error) {
+      if (response.ok) {
+        // Si la compra es exitosa
+        alert(data.message || "Compra realizada con éxito.");
+        clearCart();  // Vaciamos el carrito
+        logOut();  // Ejecutamos el cierre de sesión
+      } else {
+        // Si hay un error en la respuesta
+        alert(data.error || "Hubo un problema con la compra.");
+        clearCart();  // Vaciamos el carrito en caso de error
+        logOut();  // Ejecutamos el cierre de sesión tras un error
+      }
+
+    } catch (error) {
       console.error("Error en el checkout:", error);
       alert("Error en el proceso de compra.");
+      clearCart();  // Vaciamos el carrito en caso de error
+      logOut();  // Ejecutamos el cierre de sesión tras un error
     }
   };
 
@@ -79,11 +84,10 @@ const Cart = () => {
       <Container className='eCart' style={{ display: 'flex', maxWidth: '50%', marginTop: '5rem', marginBottom: '25rem' }}>
         <div className="text-center">
           <h2>🛒 Total Carrito: {formatPrice(getTotal())}</h2>
-          {/* El botón "Pagar" se deshabilita si el carrito está vacío o si no hay token */}
           <Button 
             disabled={!token || cart.length === 0} 
             className={token ? "m-2 btn-lg btn-success" : "m-2 btn-lg btn-danger"} 
-            onClick={handleCheckout}  // Aquí se utiliza la función handleCheckout al hacer clic
+            onClick={handleCheckout}  // Aquí utilizamos la función handleCheckout al hacer clic
           >
             Pagar
           </Button>
