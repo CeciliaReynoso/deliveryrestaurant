@@ -73,6 +73,8 @@ const PizzaComponent = () => {
             style={{
               display: 'flex',
               flexDirection: 'column',
+              justifyContent: 'start',
+              alignItems:'start',
               width: '100%',
               padding: '0.5rem',
             }}

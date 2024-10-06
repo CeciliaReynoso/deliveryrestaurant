@@ -22,7 +22,7 @@ export default function ProfileComponent() {
 
   return (
     <div>
-      <div className='eDesc' style={{
+      <div className='eDesc2' style={{
         maxWidth: '100%',
         height: 'calc(100vh - 15%)',
         marginTop: '5rem',

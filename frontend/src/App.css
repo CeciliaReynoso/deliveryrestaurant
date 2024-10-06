@@ -7,6 +7,7 @@
 }
 ul{
   list-style: none;
+  text-align: left;
 }
 h6{
   padding: 0.5rem;
@@ -105,9 +106,18 @@ h6{
 .eDesc{
   display: flex;
   flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  text-align: center;
+}
+
+.eDesc2{
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
+}
 }
 /*Margenes para componentes con pocos datos como pizza o login
 /* Márgenes para pantallas pequeñas y superiores */
